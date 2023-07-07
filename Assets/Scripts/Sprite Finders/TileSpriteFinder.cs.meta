@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: a15e10e1b13f5fa499fbd37eb5f7023b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - single: {fileID: 2077270055, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  - line: {fileID: -1447149707, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  - curve: {fileID: 150994190, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  - tIntersection: {fileID: 1427398216, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  - cross: {fileID: 830694604, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

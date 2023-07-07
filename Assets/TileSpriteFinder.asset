@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a15e10e1b13f5fa499fbd37eb5f7023b, type: 3}
+  m_Name: TileSpriteFinder
+  m_EditorClassIdentifier: 
+  blank: {fileID: -113260442, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  blueSingle: {fileID: 2077270055, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  blueLine: {fileID: 965761971, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  blueCurve: {fileID: 1221577570, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  blueT: {fileID: 1427398216, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  blueCross: {fileID: 830694604, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  redSingle: {fileID: 1003604702, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  redLine: {fileID: -418567038, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  redCurve: {fileID: 1235426733, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  redT: {fileID: 1726997630, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  redCross: {fileID: 1547627692, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  multiCurve: {fileID: 150994190, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  multiCross: {fileID: -1447149707, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  wrongCurve_A: {fileID: 176501186, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  wrongCurve_B: {fileID: 1055272991, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  wrongStraight: {fileID: -1846708665, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  wrongT_A: {fileID: 1459857173, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  wrongT_B: {fileID: 414019128, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  wrongT_C: {fileID: 1821878103, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  wrongT_D: {fileID: 1074235300, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  wrongT_E: {fileID: -835455265, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  wrongT_F: {fileID: -1849381946, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  wrongCrossRed: {fileID: -833263725, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
+  wrongCrossBlue: {fileID: -304317036, guid: 23e2639c5e69ba44a93b5d7f7294324a, type: 3}
