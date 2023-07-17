@@ -9,7 +9,7 @@ public class LEDController : MonoBehaviour
     float currentStepDuration;
 
     private void Start() {
-        SetPattern(LEDPatternLookup.flashSOS);
+        // SetPattern(LEDPatternLookup.flashSOS);
     }
 
     private void Update() {

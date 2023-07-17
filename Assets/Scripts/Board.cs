@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Board
@@ -8,6 +9,7 @@ public class Board
     public Vector2Int[] startTilePositions;
     public BoardPath[] paths;
     public Vector2Int[] brokenTilePositions;
+    public bool isSolved;
 
     public Board(TileInfo[,] tiles, BoardPath[] paths) {
         this.tiles = tiles;
@@ -29,14 +31,25 @@ public class Board
     }
 
     public void SetTile(Vector2Int position, TileInfo tile) {
-        tiles[position.x, position.y] = tile;        
+        tiles[position.x, position.y] = tile;
     }
 
     public void SetTile(int x, int y, TileInfo tile) {
         tiles[x, y] = tile;
     }
 
-    bool IsPathValid(BoardPath path) {
+    public void CheckState() {
+        isSolved = paths.All(path => IsPathValid(path));
+        // foreach (BoardPath path in paths) {
+        //     if(!IsPathValid(path)) {
+        //         isSolved = false;
+        //         return;
+        //     }
+        // }
+        // isSolved = true;
+    }
+
+    public bool IsPathValid(BoardPath path) {
         Dictionary<int, Vector2Int> nextTileDirectionLookup = new Dictionary<int, Vector2Int> { // I hate this, please fix it
             { 0, Vector2Int.left },
             { 1, Vector2Int.up },
@@ -83,6 +96,7 @@ public class Board
         }
     }
 }
+
 [System.Serializable]
 public class TileInfo {
     public string tileCode;

@@ -44,7 +44,7 @@ public class DraggableManager : MonoBehaviour
         if (Input.GetMouseButtonUp(0)) {
             HandleDrop();
         }
-        if (selected != null) {
+        if (selected != null && selected.lastKnownLocation.isReachable) {
             selected.Drag();
             UpdateExpectedDropoff();
             cursor.transform.position = selected.transform.position;
@@ -56,8 +56,10 @@ public class DraggableManager : MonoBehaviour
 
     void HandleHoverTile(int id) {
         hovered = tiles[id];
-        cursor.SetActive(true);
-        cursor.transform.position = hovered.transform.position;
+        if (hovered.lastKnownLocation.isReachable) {
+            cursor.SetActive(true);
+            cursor.transform.position = hovered.transform.position;
+        }
     }
 
     void HandleEndHoverTile() {
@@ -140,9 +142,14 @@ public class DraggableManager : MonoBehaviour
                     AddDropoffToEligible(destination.id);
                 }
             }
-            return hitInfo.collider.transform.GetComponent<Draggable>();
+            Draggable clicked = hitInfo.collider.transform.GetComponent<Draggable>();
+            if (clicked != null) {
+                if (clicked.lastKnownLocation.isReachable) {
+                    return clicked;
+                }
+            }
         }
-        else return null;
+        return null;
     }
 
 }

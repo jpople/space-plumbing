@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class BoardManager : MonoBehaviour
 {
@@ -9,13 +11,18 @@ public class BoardManager : MonoBehaviour
     [SerializeField] GameObject emptyDropPointPrefab;
     [SerializeField] TileSpriteFinder spriteFinder;
     public Board board;
-    Transform boardTileHolder;
+    [SerializeField] Transform boardTileHolder;
     public TileDestination[,] dropPoints;
     private Dictionary<int, Vector2Int> boardPositionLookup;
     const float TILE_OFFSET = 36/32f;
+    // door
+    [SerializeField] Transform door;
+    public bool isOpen;
+    AudioSource source;
 
     void Awake()
     {
+        source = GetComponent<AudioSource>();
         // hardcoded tiles
         string[,] tileCodes = {
             { "XXXX", "XXXX", "XXUX", "XXXX", "XXXX"},
@@ -51,7 +58,6 @@ public class BoardManager : MonoBehaviour
         );
         
         // make tile game objects
-        boardTileHolder = transform.GetChild(0);
         for(int i = 0; i < tileCodes.GetLength(0); i++) {
             for (int j = 0; j < tileCodes.GetLength(1); j++) {
                 Vector3 tilePos = new Vector3(boardTileHolder.position.x + (TILE_OFFSET * (j - 2f)), boardTileHolder.position.y + (TILE_OFFSET * -(i - 2)), 0);
@@ -62,8 +68,6 @@ public class BoardManager : MonoBehaviour
                     board.SetTile(new Vector2Int(i, j), null);
                     newTileDropoff = Instantiate(emptyDropPointPrefab, tilePos, Quaternion.identity, boardTileHolder);
                     dropPointInfo = newTileDropoff.GetComponent<TileDestination>();
-                    // hardcoded "inventory"-- temp, remove when integrating real inventory system
-                    // newTileHolder = Instantiate(dropPointWithTilePrefab, outsidePos, Quaternion.identity, boardTileHolder);
                 }
                 else {
                     newTileHolder = Instantiate(dropPointWithTilePrefab, tilePos, Quaternion.identity, boardTileHolder);
@@ -85,8 +89,6 @@ public class BoardManager : MonoBehaviour
                 dropPointInfo.updateBoard.AddListener(UpdateBoard);
                 dropPointInfo.vacate.AddListener(ClearBoardDropPoint);
                 dropPoints[i, j] = dropPointInfo;
-
-
             }
         }
     }
@@ -97,12 +99,39 @@ public class BoardManager : MonoBehaviour
                 boardPositionLookup[dropPoints[i, j].id] = new Vector2Int(i, j);
             }
         }
+        SetAccessPanelState(false);
+    }
+
+    void SetAccessPanelState(bool newState) {
+        door.gameObject.SetActive(!newState);
+        isOpen = newState;
+        for(int i = 0; i < board.tiles.GetLength(0); i++) {
+            for (int j = 0; j < board.tiles.GetLength(1); j++) {
+                dropPoints[i, j].isAvailable = isOpen && board.GetTile(i, j) == null; // this causes problems
+                dropPoints[i, j].isReachable = isOpen;
+            }
+        }
+    }
+
+    public void HandleOpenButtonPress() {
+        if(!isOpen) {
+            source.Play();
+        }
+        SetAccessPanelState(true);
+    }
+
+    public void HandleCloseButtonPress() {
+        if(isOpen) {
+            source.Play();
+        }
+        SetAccessPanelState(false);
     }
 
     private void UpdateBoard(int id, TileInfo newInfo) {
         if (boardPositionLookup.TryGetValue(id, out Vector2Int position)) {
             board.SetTile(position, newInfo); 
         }
+        board.CheckState();
     }
 
     private void ClearBoardDropPoint(int id) {
@@ -110,18 +139,4 @@ public class BoardManager : MonoBehaviour
             board.SetTile(position, null);
         }
     }
-
-    // private void UpdateDebugTexts() {
-    //     for(int i = 0; i < board.tiles.GetLength(0); i++) {
-    //         for (int j = 0; j < board.tiles.GetLength(1); j++) {
-    //             TextMeshProUGUI label = dropPoints[i,j].GetComponentInChildren<TextMeshProUGUI>();
-    //             if (board.GetTile(i, j) != null) {
-    //                 label.text = board.GetTile(i, j).tileCode;
-    //             }
-    //             else {
-    //                 label.text = "empty";
-    //             }
-    //         }
-    //     }
-    // }
 }

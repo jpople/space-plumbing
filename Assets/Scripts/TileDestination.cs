@@ -13,6 +13,7 @@ public class TileDestination : MonoBehaviour
     public ExitDropoffRadiusEvent exit;
 
     public bool isAvailable = true;
+    public bool isReachable = true;
 
     public InventoryUpdateEvent updateInventory;
     public BoardUpdateEvent updateBoard;
@@ -34,11 +35,15 @@ public class TileDestination : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        enter.Invoke(id);
+        if (isReachable) {
+            enter.Invoke(id);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other) {
-        exit.Invoke(id);
+        if (isReachable) {
+            exit.Invoke(id);
+        }
     }
 
     public void EnableGhost(Sprite selectedSprite) {
