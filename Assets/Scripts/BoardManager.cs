@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class BoardManager : MonoBehaviour
 {
@@ -18,7 +16,10 @@ public class BoardManager : MonoBehaviour
     // door
     [SerializeField] Transform door;
     public bool isOpen;
+    bool isDoorInMotion;
     AudioSource source;
+    const float DOOR_MOVE_DURATION = 0.65f; // derive from SFX duration
+    const float DOOR_HEIGHT = 5f;
 
     void Awake()
     {
@@ -103,7 +104,6 @@ public class BoardManager : MonoBehaviour
     }
 
     void SetAccessPanelState(bool newState) {
-        door.gameObject.SetActive(!newState);
         isOpen = newState;
         for(int i = 0; i < board.tiles.GetLength(0); i++) {
             for (int j = 0; j < board.tiles.GetLength(1); j++) {
@@ -114,17 +114,15 @@ public class BoardManager : MonoBehaviour
     }
 
     public void HandleOpenButtonPress() {
-        if(!isOpen) {
-            source.Play();
+        if (!isDoorInMotion) {
+            StartCoroutine(OpenPanel());
         }
-        SetAccessPanelState(true);
     }
 
     public void HandleCloseButtonPress() {
-        if(isOpen) {
-            source.Play();
+        if (!isDoorInMotion) {
+            StartCoroutine(ClosePanel());
         }
-        SetAccessPanelState(false);
     }
 
     private void UpdateBoard(int id, TileInfo newInfo) {
@@ -138,5 +136,39 @@ public class BoardManager : MonoBehaviour
         if(boardPositionLookup.TryGetValue(id, out Vector2Int position)) {
             board.SetTile(position, null);
         }
+    }
+
+    private IEnumerator OpenPanel() {
+        isDoorInMotion = true;
+        SetAccessPanelState(true);
+        source.Play();
+        float timeElapsed = 0;
+        SpriteRenderer doorSprite = door.GetComponent<SpriteRenderer>();
+        Vector2 startingSize = doorSprite.size;
+        Vector2 endingSize = new Vector2(doorSprite.size.x, 0);
+        while (timeElapsed < DOOR_MOVE_DURATION) {
+            doorSprite.size = Vector2.Lerp(startingSize, endingSize, (timeElapsed / DOOR_MOVE_DURATION));
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        doorSprite.size = endingSize;
+        isDoorInMotion = false;
+    }
+
+    private IEnumerator ClosePanel() {
+        isDoorInMotion = true;
+        source.Play();
+        float timeElapsed = 0;
+        SpriteRenderer doorSprite = door.GetComponent<SpriteRenderer>();
+        Vector2 startingSize = doorSprite.size;
+        Vector2 endingSize = new Vector2(doorSprite.size.x, DOOR_HEIGHT);
+        while (timeElapsed < DOOR_MOVE_DURATION) {
+            doorSprite.size = Vector2.Lerp(startingSize, endingSize, (timeElapsed / DOOR_MOVE_DURATION));
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        doorSprite.size = endingSize;
+        SetAccessPanelState(false);
+        isDoorInMotion = false;
     }
 }

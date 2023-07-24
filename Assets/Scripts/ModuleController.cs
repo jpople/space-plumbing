@@ -9,7 +9,7 @@ public class ModuleController : MonoBehaviour
         NOMINAL,
         SELF_TEST
     }
-    [SerializeField] TextMeshProUGUI stateText;
+    [SerializeField] NumericDisplayController display;
 
     ModuleState currentState;
     bool accessPanelIsOpen = false;
@@ -120,13 +120,13 @@ public class ModuleController : MonoBehaviour
         // boy, do I hate this-- maybe a full class-based FSM *would* be better here
         switch (newState) {
             case ModuleState.OPERATIONAL:
-                stateText.text = "";
+                display.SetValue("");
                 statusLED.SetPattern(LEDPatternLookup.on);
                 currentState = ModuleState.OPERATIONAL;
                 timeRemaining = 5f;
                 break;
             case ModuleState.INCIDENT:
-                stateText.text = "162";
+                display.SetValue(incidentCode);
                 statusLED.SetPattern(LEDPatternLookup.flashSOS);
                 currentState = ModuleState.INCIDENT;
                 break;
