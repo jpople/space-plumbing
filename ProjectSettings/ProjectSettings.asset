@@ -15,7 +15,7 @@ PlayerSettings:
   companyName: DefaultCompany
   productName: Plumbing UI Test
   defaultCursor: {fileID: 2800000, guid: a71670ba6e7f0e74f8faf1914c0eb611, type: 3}
-  cursorHotspot: {x: 0.25, y: 0.25}
+  cursorHotspot: {x: 6, y: 6}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
   m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 1
