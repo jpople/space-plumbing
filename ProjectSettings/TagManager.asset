@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Transparent Overlay
   layers:
   - Default
   - TransparentFX
@@ -58,4 +59,7 @@ TagManager:
     locked: 0
   - name: Panel Controls
     uniqueID: 1399700813
+    locked: 0
+  - name: Manual Overlay
+    uniqueID: 3321550207
     locked: 0

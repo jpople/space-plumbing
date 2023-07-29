@@ -1,8 +1,7 @@
 
 using UnityEngine;
 using TMPro;
-public class ModuleController : MonoBehaviour
-{
+public class ModuleController : MonoBehaviour {
     public enum ModuleState {
         OPERATIONAL,
         INCIDENT,
@@ -16,27 +15,27 @@ public class ModuleController : MonoBehaviour
     // bool internalConfigIsValid = false;
     bool startButtonPressed = false;
     [SerializeField] LEDController statusLED;
-    string incidentCode = "162";
+    string incidentCode = "181";
     RequiredConfig nominalConfig = new RequiredConfig( // in the future, we'll find these using a lookup by incident code
         true,
-        false,
-        (ModuleConfig.FiltrationSetting) 1, // medium
-        20,
-        70,
-        54,
-        64
+        true,
+        (ModuleConfig.FiltrationSetting)2, // medium
+        40,
+        60,
+        24,
+        34
     );
 
     RequiredConfig resumeConfig = new RequiredConfig( // see note on nominalConfig
-        false,
-        false,
-        (ModuleConfig.FiltrationSetting) 0, // low
-        10,
-        30,
-        54,
-        64
+        true,
+        true,
+        (ModuleConfig.FiltrationSetting)3, // variant
+        50,
+        70,
+        52,
+        62
     );
-    float timeRemaining = 5f;
+    float timeRemaining = 7f;
     // "inputs"
     ControlPanelManager controlPanel;
     BoardManager board;
@@ -56,7 +55,7 @@ public class ModuleController : MonoBehaviour
     }
 
     private void Update() {
-        switch(currentState) {
+        switch (currentState) {
             case ModuleState.OPERATIONAL:
                 // update
                 timeRemaining -= Time.deltaTime;
