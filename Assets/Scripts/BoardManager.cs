@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardManager : MonoBehaviour
-{
+public class BoardManager : MonoBehaviour {
     [SerializeField] GameObject dropPointWithTilePrefab;
     [SerializeField] GameObject emptyDropPointPrefab;
     [SerializeField] TileSpriteFinder spriteFinder;
@@ -12,7 +11,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField] Transform boardTileHolder;
     public TileDestination[,] dropPoints;
     private Dictionary<int, Vector2Int> boardPositionLookup;
-    const float TILE_OFFSET = 36/32f;
+    const float TILE_OFFSET = 36 / 32f;
     // door
     [SerializeField] Transform door;
     public bool isOpen;
@@ -21,8 +20,7 @@ public class BoardManager : MonoBehaviour
     const float DOOR_MOVE_DURATION = 0.65f; // derive from SFX duration
     const float DOOR_HEIGHT = 5f;
 
-    void Awake()
-    {
+    void Awake() {
         source = GetComponent<AudioSource>();
         // hardcoded tiles
         string[,] tileCodes = {
@@ -41,28 +39,28 @@ public class BoardManager : MonoBehaviour
         };
 
         boardPositionLookup = new Dictionary<int, Vector2Int>();
-        dropPoints = new TileDestination[5,5];
-        
+        dropPoints = new TileDestination[5, 5];
+
         // generate code board
         TileInfo[,] tiles = new TileInfo[tileCodes.GetLength(0), tileCodes.GetLength(1)];
-        for(int i = 0; i < tiles.GetLength(0); i++) {
+        for (int i = 0; i < tiles.GetLength(0); i++) {
             for (int j = 0; j < tiles.GetLength(1); j++) {
                 tiles[i, j] = new TileInfo(tileCodes[i, j], brokens[i, j]);
             }
         }
         board = new Board(
-            tiles, 
+            tiles,
             new BoardPath[] {
                 new BoardPath(new Vector2Int(2, 0), new Vector2Int(1, 4)), // red path
                 new BoardPath(new Vector2Int(3, 0), new Vector2Int(0, 2)), // blue path
             }
         );
-        
+
         // make tile game objects
-        for(int i = 0; i < tileCodes.GetLength(0); i++) {
+        for (int i = 0; i < tileCodes.GetLength(0); i++) {
             for (int j = 0; j < tileCodes.GetLength(1); j++) {
                 Vector3 tilePos = new Vector3(boardTileHolder.position.x + (TILE_OFFSET * (j - 2f)), boardTileHolder.position.y + (TILE_OFFSET * -(i - 2)), 0);
-                Vector3 outsidePos = new Vector3(4 , (TILE_OFFSET * i * 1.5f) - 2, 0);
+                Vector3 outsidePos = new Vector3(4, (TILE_OFFSET * i * 1.5f) - 2, 0);
                 GameObject newTileDropoff, newTileHolder;
                 TileDestination dropPointInfo;
                 if (board.tiles[i, j].isBroken) {
@@ -75,7 +73,7 @@ public class BoardManager : MonoBehaviour
                     dropPointInfo = newTileHolder.GetComponent<TileDestination>();
                     // put tile on holder if applicable
                     Transform newTile = newTileHolder.transform.GetChild(1);
-                    if(board.tiles[i, j].isEdge) {
+                    if (board.tiles[i, j].isEdge) {
                         Destroy(newTile.GetComponent<Draggable>());
                     }
                     SpriteInfo newTileSpriteInfo = spriteFinder.FindSprite(board.GetTile(i, j).tileCode);
@@ -84,7 +82,7 @@ public class BoardManager : MonoBehaviour
                     newTile.Rotate(0, 0, -90 * newTileSpriteInfo.rotation);
                 }
                 // setup events for updating
-                if(dropPointInfo.updateBoard == null) {
+                if (dropPointInfo.updateBoard == null) {
                     dropPointInfo.updateBoard = new BoardUpdateEvent();
                 }
                 dropPointInfo.updateBoard.AddListener(UpdateBoard);
@@ -95,7 +93,7 @@ public class BoardManager : MonoBehaviour
     }
 
     private void Start() {
-        for(int i = 0; i < board.tiles.GetLength(0); i++) {
+        for (int i = 0; i < board.tiles.GetLength(0); i++) {
             for (int j = 0; j < board.tiles.GetLength(1); j++) {
                 boardPositionLookup[dropPoints[i, j].id] = new Vector2Int(i, j);
             }
@@ -105,7 +103,7 @@ public class BoardManager : MonoBehaviour
 
     void SetAccessPanelState(bool newState) {
         isOpen = newState;
-        for(int i = 0; i < board.tiles.GetLength(0); i++) {
+        for (int i = 0; i < board.tiles.GetLength(0); i++) {
             for (int j = 0; j < board.tiles.GetLength(1); j++) {
                 dropPoints[i, j].isAvailable = isOpen && board.GetTile(i, j) == null; // this causes problems
                 dropPoints[i, j].isReachable = isOpen;
@@ -114,26 +112,26 @@ public class BoardManager : MonoBehaviour
     }
 
     public void HandleOpenButtonPress() {
-        if (!isDoorInMotion) {
+        if (!isOpen && !isDoorInMotion) {
             StartCoroutine(OpenPanel());
         }
     }
 
     public void HandleCloseButtonPress() {
-        if (!isDoorInMotion) {
+        if (isOpen && !isDoorInMotion) {
             StartCoroutine(ClosePanel());
         }
     }
 
     private void UpdateBoard(int id, TileInfo newInfo) {
         if (boardPositionLookup.TryGetValue(id, out Vector2Int position)) {
-            board.SetTile(position, newInfo); 
+            board.SetTile(position, newInfo);
         }
         board.CheckState();
     }
 
     private void ClearBoardDropPoint(int id) {
-        if(boardPositionLookup.TryGetValue(id, out Vector2Int position)) {
+        if (boardPositionLookup.TryGetValue(id, out Vector2Int position)) {
             board.SetTile(position, null);
         }
     }

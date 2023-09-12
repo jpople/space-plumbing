@@ -23,6 +23,8 @@ public static class AwaUtils {
     }
 
     public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> source) {
+        // syntax to call this:
+        // foreach (var (item, index) in collection.WithIndex());
         return source.Select((item, index) => (item, index));
     }
 }

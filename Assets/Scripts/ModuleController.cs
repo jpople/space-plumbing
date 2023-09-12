@@ -35,7 +35,7 @@ public class ModuleController : MonoBehaviour {
         52,
         62
     );
-    float timeRemaining = 7f;
+    float timeRemaining = 10f;
     // "inputs"
     ControlPanelManager controlPanel;
     BoardManager board;

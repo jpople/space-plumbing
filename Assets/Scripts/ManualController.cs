@@ -4,10 +4,12 @@ using UnityEngine;
 public class ManualController : MonoBehaviour {
     [SerializeField] TextMeshProUGUI mainText;
     [SerializeField] TextMeshProUGUI pageNumberDisplay;
+    AudioSource source;
 
     int currentPage = 1;
 
     private void Start() {
+        source = GetComponent<AudioSource>();
         mainText.text = ManualMDParser.ParseFile();
         pageNumberDisplay.text = $"{mainText.pageToDisplay}";
         RefreshPageNumber();
@@ -16,6 +18,7 @@ public class ManualController : MonoBehaviour {
     public void ChangePage(int change) {
         int newPage = currentPage + change;
         GoToPage(newPage);
+        source.Play();
     }
 
     public void GoToFirst() {

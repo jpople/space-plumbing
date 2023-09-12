@@ -74,3 +74,6 @@ crashlytics-build.properties
 # Aseprites
 *.ase
 *.aseprite
+
+# Omnisharp config
+omnisharp.json
